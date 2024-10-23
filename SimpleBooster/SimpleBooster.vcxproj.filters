@@ -24,6 +24,9 @@
     <ClCompile Include="processor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="myvst3fuid.h">
@@ -32,5 +35,21 @@
     <ClInclude Include="processor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="myvst3define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Kene2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="myEditor.uidesc">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

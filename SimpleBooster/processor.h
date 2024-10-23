@@ -1,6 +1,7 @@
 #pragma once
 // VST3 SDKのインクルードファイル
 #include "public.sdk/source/vst/vstaudioeffect.h"
+#include "pluginterfaces/vst/ivstparameterchanges.h"
 
 // VST3作成に必要なの名前空間を使用
 namespace Steinberg {
@@ -11,7 +12,13 @@ namespace Steinberg {
 		// ===================================================================================
 		class MyVSTProcessor : public AudioEffect
 		{
+		protected:
+			ParamValue volume;
+			int32 type;
 		public:
+			//コンストラクタ
+			MyVSTProcessor();
+
 			// クラスを初期化する関数(必須)
 			tresult PLUGIN_API initialize(FUnknown* context);
 

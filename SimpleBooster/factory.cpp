@@ -4,6 +4,7 @@
 // 自作VSTのヘッダファイルをインクルード
 #include "myvst3fuid.h"
 #include "processor.h"
+#include "controller.h"
 
 // 製作者(製作会社)の名前。終端文字「\0」含めて64文字まで。
 #define MYVST_VENDOR   "Studio Silence"
@@ -47,5 +48,17 @@ DEF_CLASS2(INLINE_UID_FROM_FUID(Steinberg::Vst::ProcessorUID),
 	MYVST_VERSION,
 	kVstVersionString,
 	Steinberg::Vst::MyVSTProcessor::createInstance)
+
+
+	// MyVSTControllerクラスの作成を行う
+	DEF_CLASS2(INLINE_UID_FROM_FUID(Steinberg::Vst::ControllerUID),
+		PClassInfo::kManyInstances,
+		kVstComponentControllerClass,
+		MYVST_VSTNAME " Controller",	// 自作VSTの名前に"Controller"を付与したもの。
+		0,						    // 使わないので必ず0にする
+		"",						    // 使わないので必ず""にする
+		MYVST_VERSION,
+		kVstVersionString,
+		Steinberg::Vst::MyVSTController::createInstance)
 
 	END_FACTORY

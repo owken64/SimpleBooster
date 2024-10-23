@@ -75,6 +75,11 @@
     <IncludePath>C:\Users\owken\Desktop\VST_SDK\vst3sdk\vstgui4;C:\Users\owken\Desktop\VST_SDK\vst3sdk;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\owken\Desktop\VST_SDK\vst3sdk\out\build\x64-Debug\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetExt>.vst3</TargetExt>
+    <IncludePath>C:\Users\owken\Desktop\VST_SDK\vst3sdk\vstgui4;C:\Users\owken\Desktop\VST_SDK\vst3sdk;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\owken\Desktop\VST_SDK\vst3sdk\out\build\x64-Release\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -111,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;SIMPLEBOOSTER_EXPORTS;_WINDOWS;_USRDLL;VSTGUI_LIVE_EDITING=1;DEVELOPMENT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,6 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;SIMPLEBOOSTER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,16 +141,26 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>base.lib;sdk.lib;sdk_common.lib;pluginterfaces.lib;vstgui.lib;vstgui_support.lib;vstgui_uidescription.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Desktop\VST_SDK\vst3sdk\public.sdk\source\main\dllmain.cpp" />
+    <ClCompile Include="controller.cpp" />
     <ClCompile Include="factory.cpp" />
     <ClCompile Include="processor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="controller.h" />
+    <ClInclude Include="myvst3define.h" />
     <ClInclude Include="myvst3fuid.h" />
     <ClInclude Include="processor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Kene2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="myEditor.uidesc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

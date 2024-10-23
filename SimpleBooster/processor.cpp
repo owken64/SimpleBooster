@@ -1,12 +1,21 @@
 // 自作VST用のインクルードファイル
 #include "myvst3fuid.h"
 #include "processor.h"
-
+#include "myvst3define.h"
 
 // VST3作成に必要なの名前空間を使用
 namespace Steinberg {
 	namespace Vst {
 
+
+		// =================================================================================
+        // コンストラクタ
+        // =================================================================================
+		MyVSTProcessor::MyVSTProcessor()
+		{
+			// コントローラーのFUIDを設定する
+			setControllerClass(ControllerUID);
+		}
 
 		// ===================================================================================
 		// クラスを初期化する関数
@@ -48,6 +57,57 @@ namespace Steinberg {
 		// ===================================================================================
 		tresult PLUGIN_API MyVSTProcessor::process(ProcessData& data)
 		{
+			// パラメーター変更の処理
+// 与えられたパラメーターがあるとき、dataのinputParameterChangesに
+// IParameterChangesクラスへのポインタのアドレスが入る
+			if (data.inputParameterChanges != NULL)
+			{
+				// 与えられたパラメーターの数を取得
+				int32 paramChangeCount = data.inputParameterChanges->getParameterCount();
+
+				// 与えられたパラメーター分、処理を繰り返す。
+				for (int32 i = 0; i < paramChangeCount; i++)
+				{
+					// パラメーター変更のキューを取得
+					// (処理するサンプル内に複数のパラメーター変更情報がある可能性があるため、
+					// キューという形になっている。)
+					IParamValueQueue* queue = data.inputParameterChanges->getParameterData(i);
+					if (queue != NULL)
+					{
+						// どのパラメーターが変更されたか知るため、パラメーターtagを取得
+						int32 tag = queue->getParameterId();
+
+						// 変更された回数を取得
+						int32 valueChangeCount = queue->getPointCount();
+						ParamValue value;
+						int32 sampleOffset;
+
+						// 最後に変更された値を取得
+						if (queue->getPoint(valueChangeCount - 1, sampleOffset, value) == kResultTrue)
+						{
+							// tagに応じた処理を実施
+							switch (tag)
+							{
+							case PARAM1_TAG:
+								// volumeはメンバー変数としてあらかじめ定義・初期化しておく。
+								volume = value * 2.0f;
+								break;
+
+							case PARAM_TYPE_TAG:
+								// typeを変更する。
+								// StringListParameterで作成されたパラメーターも、プロセッサクラスに
+								// 渡されるときは0.0～1.0となってしまう。
+								// 今回はリスト数は3つなので、Volume…0.0f、Tremolo…0.5f、Panning…1.0fとなる。
+								// リストの数が4つの場合、0.0f、0.333…、0.666…、1.0fとなる。
+								// 「1.0f / (リストの数 - 1)」で求められる。
+								type = (int32)value;
+								break;
+							}
+						}
+					}
+				}
+			}
+
 			// 入力・出力バッファのポインタをわかりやすい変数に格納
 			// inputs[]、outputs[]はAudioBusの数だけある(addAudioInput()、addAudioOutput()で追加した分だけ)
 			// 今回はAudioBusは1つだけなので 0 のみとなる
@@ -61,8 +121,13 @@ namespace Steinberg {
 			// numSamplesで示されるサンプル分、音声を処理する
 			for (int32 i = 0; i < data.numSamples; i++)
 			{
-				outL[i] = inL[i];
-				outR[i] = inR[i];
+				switch (type)
+				{
+   				  case 0:
+					outL[i] = volume * inL[i];;
+					outR[i] = volume * inR[i];
+					break;
+				}
 			}
 
 			// 問題なければkResultTrueを返す(おそらく必ずkResultTrueを返す)
